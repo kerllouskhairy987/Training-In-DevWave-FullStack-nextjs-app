@@ -1,3 +1,20 @@
 1- خدمة العمله 
 يعني يتواصل معايا عن طريق EmailJs
 
+2- articles 
+ اعمل فكرة الماقلات عن كل دواء مثلا لما اضغط عليه يوديني ل العنوان و الوصف و الصوره بتاعت كل دواء 
+بمعني مختصر مقال عن الدواء 
+- كيفية استخدامه و كدا يعني 
+
+
+
+main concept {  // every route must contain these
+    page
+    error page --> throw new Error("") (error page in specific route OR error page in layout )
+    page not found
+}
+
+
+{
+    react toastify 
+}
