@@ -5,7 +5,8 @@ import { NextResponse, NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
 
     const cookieStore = await cookies()
-    const token = cookieStore.get('jwtToken')
+    const token = cookieStore.get('jwtToken')?.value
+
     if (!token) { // && request.method === "DELETE"
         if (request.nextUrl.pathname.startsWith("/api/users/profile")) {
             return Response.json(
@@ -14,7 +15,7 @@ export async function middleware(request: NextRequest) {
             );
         }
     } else {
-        if(
+        if (
             request.nextUrl.pathname === "/login" ||
             request.nextUrl.pathname === "/register"
         ) {
