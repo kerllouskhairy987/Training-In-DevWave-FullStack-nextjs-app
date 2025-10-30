@@ -14,7 +14,6 @@ import bcrypt from "bcryptjs";
 export async function POST(request: Request) {
     try {
         const body = await request.json() as IRegisterDto;
-        console.log(body)
         const validation = registerSchema.safeParse(body);
         if (!validation.success) {
             return Response.json(
@@ -46,24 +45,23 @@ export async function POST(request: Request) {
             }
         })
 
-        // set cookie
-        const cookie = setCookie({
+        const jwtPayload: JWTPayload = {
             id: newUser.id,
             username: newUser.username,
             email: newUser.email,
             isAdmin: newUser.isAdmin,
-        })
+        }
 
-        return Response.json(
-            {
-                message: "User registered successfully",
-                user: { newUser }
-            },
-            {
-                headers: { "Set-Cookie": cookie },
-                status: 201
-            }
-        );
+        // set cookie
+        const cookie = setCookie(jwtPayload)
+
+        return Response.json({
+            message: "User registered successfully",
+            user: { newUser }
+        }, {
+            headers: { "Set-Cookie": cookie },
+            status: 201
+        });
     } catch (error) {
         console.log(error)
         return Response.json({ message: "Internal Server Error, From Server" }, { status: 500 });
