@@ -1,6 +1,6 @@
 import { DOMAIN } from "@/utils/constants";
-import { Article } from "../../generated/prisma/client";
 import { SingleArticle } from "@/types";
+import { Article } from "@prisma/client";
 
 // Get Articles Based On Page Number
 export async function getArticles(pageNumber: string): Promise<Article[]> {

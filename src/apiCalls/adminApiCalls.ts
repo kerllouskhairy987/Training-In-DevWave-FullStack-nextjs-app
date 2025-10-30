@@ -1,5 +1,5 @@
 import { DOMAIN } from "@/utils/constants";
-import { Comment } from "../../generated/prisma/client";
+import { Comment } from "@prisma/client";
 
 // Get All Comments
 export async function getAllComments(token: string): Promise<Comment[]> {
