@@ -29,8 +29,9 @@ const RegisterForm = () => {
                 },
                 body: JSON.stringify({ username, email, password }),
             })
+            console.log("RES", res)
             const data = await res.json();
-            console.log(data)
+            console.log("DATA", data)
             if (res.status === 201) {
                 toast.success(data.message)
                 router.replace("/");

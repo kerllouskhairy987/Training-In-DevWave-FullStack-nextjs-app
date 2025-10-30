@@ -14,6 +14,7 @@ import bcrypt from "bcryptjs";
 export async function POST(request: Request) {
     try {
         const body = await request.json() as IRegisterDto;
+        console.log(body)
         const validation = registerSchema.safeParse(body);
         if (!validation.success) {
             return Response.json(
@@ -67,6 +68,6 @@ export async function POST(request: Request) {
         );
     } catch (error) {
         console.log(error)
-        return Response.json({ message: "Internal Server Error" }, { status: 500 });
+        return Response.json({ message: "Internal Server Error, From Server" }, { status: 500 });
     }
 }
