@@ -1,5 +1,4 @@
-import { Article, Comment, User } from "../../generated/prisma/client";
-
+import { Article, Comment, User } from "@prisma/client";
 
 export interface JWTPayload {
     id: number,
