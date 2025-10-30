@@ -46,15 +46,13 @@ export async function POST(request: Request) {
             }
         })
 
-        const jwtPayload: JWTPayload = {
+        // set cookie
+        const cookie = setCookie({
             id: newUser.id,
             username: newUser.username,
             email: newUser.email,
             isAdmin: newUser.isAdmin,
-        }
-
-        // set cookie
-        const cookie = setCookie(jwtPayload)
+        })
 
         return Response.json(
             {

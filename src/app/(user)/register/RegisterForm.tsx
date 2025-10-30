@@ -30,6 +30,7 @@ const RegisterForm = () => {
                 body: JSON.stringify({ username, email, password }),
             })
             console.log("RES", res)
+            console.log("RES - BODY", res.body)
             const data = await res.json();
             console.log("DATA", data)
             if (res.status === 201) {
