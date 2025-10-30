@@ -1,41 +1,13 @@
 import { getSingleArticle } from "@/apiCalls/articleApiCall";
 import AddCommentForm from "@/components/comments/AddCommentForm";
 import CommentItem from "@/components/comments/CommentItem";
-import { SingleArticle } from "@/types";
+import { CommentWithUser, SingleArticle } from "@/types";
 import { verifyTokenForPages } from "@/utils/verifyToken";
 import { cookies } from "next/headers";
 
 interface IProps {
     params: Promise<{ id: string }>
 }
-
-// ************* TODO: use cache function
-// export async function generateMetadata(
-//     { params }: IProps,
-//     parent: ResolvingMetadata
-// ): Promise<Metadata> {
-//     const id = (await params).id
-//     const post = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`).then((res) =>
-//         res.json()
-//     )
-
-//     let title;
-//     let description;
-//     if (!post) {
-//         title = 'Article Not Found';
-//         description = 'The requested article does not exist.';
-//     }
-
-//     title = post.title;
-//     description = post.body;
-
-
-//     return {
-//         title,
-//         description,
-//     }
-// }
-
 
 const SingleArticlePage = async ({ params }: IProps) => {
     const { id } = await params;
@@ -60,7 +32,7 @@ const SingleArticlePage = async ({ params }: IProps) => {
             <h4 className="text-xl text-gray-800 ps-1 font-semibold mb-2 mt-7">
                 Comments
             </h4>
-            {article.comments.map(comment => (
+            {article.comments.map((comment: CommentWithUser) => (
                 <CommentItem key={comment.id} comment={comment} payload={payload} />
             ))}
         </section>
