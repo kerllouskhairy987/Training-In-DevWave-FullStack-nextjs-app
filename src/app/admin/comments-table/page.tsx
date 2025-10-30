@@ -2,9 +2,9 @@ import { verifyTokenForPages } from '@/utils/verifyToken';
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { Comment } from '../../../../generated/prisma/client';
 import { getAllComments } from '@/apiCalls/adminApiCalls';
 import DeleteCommentsBtn from './DeleteCommentsBtn';
+import { Comment } from '@prisma/client';
 
 export const metadata: Metadata = {
     title: "Admin - Comments",

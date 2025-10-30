@@ -3,11 +3,11 @@ import { verifyTokenForPages } from '@/utils/verifyToken';
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { Article } from '../../../../generated/prisma/client';
 import { getArticles, getArticlesCount } from '@/apiCalls/articleApiCall';
 import Link from 'next/link';
 import Pagination from '@/components/articles/Pagination';
 import DeleteArticleBtn from './DeleteArticleBtn';
+import { Article } from '@prisma/client';
 
 export const metadata: Metadata = {
     title: 'Admin Articles',

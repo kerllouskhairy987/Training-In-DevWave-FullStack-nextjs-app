@@ -1,6 +1,6 @@
+import { Article } from '@prisma/client';
 import Link from 'next/link'
 import React from 'react'
-import { Article } from '../../../generated/prisma/client';
 
 interface ArticleItemProps {
     article: Article;

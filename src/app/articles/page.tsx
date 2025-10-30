@@ -2,9 +2,9 @@ import ArticlesItem from "@/components/articles/ArticlesItem";
 import Pagination from "@/components/articles/Pagination";
 import SearchArticleInput from "@/components/articles/SearchArticleInput";
 import { Metadata } from "next";
-import { Article } from "../../../generated/prisma/client";
 import { getArticles, getArticlesCount } from "@/apiCalls/articleApiCall";
 import { ARTICLE_PER_PAGE } from "@/utils/constants";
+import { Article } from "@prisma/client";
 
 export const metadata: Metadata = {
     title: 'Articles Page',

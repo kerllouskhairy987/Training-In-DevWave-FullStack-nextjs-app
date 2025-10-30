@@ -4,8 +4,8 @@ import { createArticleSchema } from "@/validations";
 import { prisma } from "@/utils/prisma";
 import { ARTICLE_PER_PAGE } from '@/utils/constants';
 import { verifyToken } from '@/utils/verifyToken';
-import { Article } from '../../../../generated/prisma/client';
 import { revalidatePath } from 'next/cache';
+import { Article } from '@prisma/client';
 
 /** 
  * @method  GET 

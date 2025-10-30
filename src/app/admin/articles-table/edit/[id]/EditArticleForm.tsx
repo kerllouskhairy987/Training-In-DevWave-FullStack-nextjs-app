@@ -2,10 +2,10 @@
 
 import ButtonSpinner from '@/components/ButtonSpinner'
 import React, { useState } from 'react'
-import { Article } from '../../../../../../generated/prisma/client'
 import { toast } from 'react-toastify';
 import { DOMAIN } from '@/utils/constants';
 import { useRouter } from 'next/navigation';
+import { Article } from '@prisma/client';
 
 interface IProps {
     article: Article;

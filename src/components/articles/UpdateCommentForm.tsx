@@ -1,3 +1,5 @@
+"use client";
+
 import { DOMAIN } from "@/utils/constants";
 import { X } from "lucide-react"
 import { useRouter } from "next/navigation";

@@ -3,7 +3,7 @@ import { getSingleArticle } from "@/apiCalls/articleApiCall";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifyTokenForPages } from "@/utils/verifyToken";
-import { Article } from "../../../../../../generated/prisma/client";
+import { Article } from "@prisma/client";
 
 interface IProps {
     params: Promise<{ id: string }>

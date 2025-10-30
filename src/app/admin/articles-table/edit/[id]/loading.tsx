@@ -1,5 +1,3 @@
-import React from 'react'
-
 const EditArticleLoading = () => {
     return (
         <div className="fix-height flex items-center justify-center px-5 lg:px-20 animate-pulse">
