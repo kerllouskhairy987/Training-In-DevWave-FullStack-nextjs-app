@@ -1,6 +1,7 @@
 "use client";
 
 import ButtonSpinner from '@/components/ButtonSpinner';
+import { DOMAIN } from '@/utils/constants';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -10,16 +11,38 @@ const LoginForm = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
-    console.log(setLoading)
+    const [isLoading, setIsLoading] = useState(false);
 
     const formSubmitHandler = async (e: React.FormEvent) => {
         e.preventDefault();
         if (email === "") return toast.error("Email is required");
         if (password === "") return toast.error("Password is required");
 
-        console.log({ email, password })
-        router.replace("/")
+        try {
+            setIsLoading(true);
+            const res = await fetch(`${DOMAIN}/api/users/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+            if (res.status === 200) {
+                toast.success(data.message);
+                router.replace("/");
+                router.refresh();
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            setIsLoading(false);
+            console.log(error)
+            toast.error("Internal Server Error")
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -29,6 +52,7 @@ const LoginForm = () => {
                 type="email"
                 placeholder="Enter Your Email"
                 value={email}
+                autoFocus
                 onChange={(e) => setEmail(e.target.value)}
             />
             <input
@@ -38,8 +62,8 @@ const LoginForm = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button disabled={loading} type="submit" className="text-2xl text-white bg-blue-800 p-2 rounded-lg font-bold">
-                {loading ? <ButtonSpinner /> : "Login"}
+            <button disabled={isLoading} type="submit" className="text-2xl text-white bg-blue-800 p-2 rounded-lg font-bold">
+                {isLoading ? <ButtonSpinner /> : "Login"}
             </button>
         </form>
     )

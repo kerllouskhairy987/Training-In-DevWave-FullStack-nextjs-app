@@ -2,16 +2,17 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import ButtonSpinner from '@/components/ButtonSpinner';
-// import { useRouter } from 'next/navigation';
+import { DOMAIN } from '@/utils/constants';
+import { useRouter } from 'next/navigation';
 
 const RegisterForm = () => {
-    // const router = useRouter();
+    const router = useRouter();
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
-    console.log(setLoading)
+    const [isLoading, setIsLoading] = useState(false);
+    console.log(setIsLoading)
 
     const formSubmitHandler = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,7 +20,31 @@ const RegisterForm = () => {
         if (email === "") return toast.error("Email is required");
         if (password === "") return toast.error("Password is required");
 
-        console.log({ username, email, password })
+        try {
+            setIsLoading(true);
+            const res = await fetch(`${DOMAIN}/api/users/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, email, password }),
+            })
+            const data = await res.json();
+            console.log(data)
+            if (res.status === 201) {
+                toast.success(data.message)
+                router.replace("/");
+                router.refresh();
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("Internal Server Error")
+            setIsLoading(false);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -29,9 +54,10 @@ const RegisterForm = () => {
                 name='username'
                 type="text"
                 placeholder="Enter Your Username"
+                autoFocus
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                />
+            />
             <input
                 className="mb-4 border rounded p-2 text-xl"
                 name='email'
@@ -48,8 +74,8 @@ const RegisterForm = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button disabled={loading} type="submit" className="text-2xl text-white bg-blue-800 p-2 rounded-lg font-bold">
-                {loading ? <ButtonSpinner /> : "Register"}
+            <button disabled={isLoading} type="submit" className="text-2xl text-white bg-blue-800 p-2 rounded-lg font-bold">
+                {isLoading ? <ButtonSpinner /> : "Register"}
             </button>
         </form>
     )

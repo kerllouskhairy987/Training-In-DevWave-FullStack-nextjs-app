@@ -1,6 +1,6 @@
 import { JWTPayload } from "@/types";
 import { IRegisterDto } from "@/types/dtos";
-import { generateJwt, setCookie } from "@/utils/generateToken";
+import { setCookie } from "@/utils/generateToken";
 import { prisma } from "@/utils/prisma";
 import { registerSchema } from "@/validations";
 import bcrypt from "bcryptjs";

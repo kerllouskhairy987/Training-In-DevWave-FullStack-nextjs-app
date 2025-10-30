@@ -2,11 +2,12 @@ import { IUpdateArticleDto } from "@/types/dtos";
 import { prisma } from "@/utils/prisma";
 import { verifyToken } from "@/utils/verifyToken";
 import { updateArticleSchema } from "@/validations";
+import { revalidatePath } from "next/cache";
 
 /** 
  * @method  GET
  * @route   ~/api/articles/:id
- * @desc    Get Single Article By Id
+ * @desc    Get Single Article By Id INCLUDING Comments
  * @access  public
 */
 interface IProps {
@@ -20,10 +21,20 @@ export async function GET(request: Request, { params }: IProps) {
         const article = await prisma.article.findUnique({
             where: { id: parseInt(id) },
             include: {
-                comments: true,
-            },
-            // orderBy: { createdAt: "desc" },
-            
+                comments: {
+                    include: {
+                        user: {
+                            select: {
+                                username: true
+                            }
+                        }
+                    },
+                    orderBy: {
+                        createdAt: 'desc',
+                    }
+                }
+            }
+
         })
         if (!article) {
             return Response.json({ message: "Article not found" }, { status: 404 });
@@ -76,6 +87,7 @@ export async function PUT(request: Request, { params }: IProps) {
             }
         })
 
+        revalidatePath('/admin/articles-table');
         return Response.json(
             {
                 message: "Article Updated successfully",
@@ -112,6 +124,7 @@ export async function DELETE(request: Request, { params }: IProps) {
         }
 
         await prisma.article.delete({ where: { id: parseInt(id) } });
+        revalidatePath("/admin/articles-table")
         return Response.json({ message: "Article deleted successfully" }, { status: 200 });
     } catch (error) {
         console.log(error)

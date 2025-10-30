@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from "next"
+import { Metadata } from "next"
 
 type IProps = {
   params: Promise<{ slug: string }>

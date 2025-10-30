@@ -4,7 +4,10 @@ import styles from './header.module.css';
 import { Home, Menu, X } from "lucide-react";
 import { useState } from "react";
 
-const Navbar = () => {
+interface IProps {
+    isAdmin: boolean;
+}
+const Navbar = ({isAdmin}: IProps) => {
     const [toggle, setToggle] = useState(false);
 
     return (
@@ -29,10 +32,11 @@ const Navbar = () => {
                     <Link onClick={() => setToggle(false)} className={styles.navLink} href="/">Home</Link>
                     <Link onClick={() => setToggle(false)} className={styles.navLink} href="/articles?pageNumber=1">Articles</Link>
                     <Link onClick={() => setToggle(false)} className={styles.navLink} href="/about">About</Link>
-                    <Link onClick={() => setToggle(false)} className={styles.navLink} href="/admin">Admin Dashboard</Link>
-                    {/* {isAdmin && (
-                        <Link onClick={() => setToggle(false)} className={styles.navLink} href="/admin">Admin Dashboard</Link>
-                    )} */}
+                    {
+                        isAdmin && (
+                            <Link onClick={() => setToggle(false)} className={styles.navLink} href="/admin">Admin Dashboard</Link>
+                        )
+                    }
                 </ul>
             </div>
         </nav>

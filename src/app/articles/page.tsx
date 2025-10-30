@@ -1,8 +1,10 @@
 import ArticlesItem from "@/components/articles/ArticlesItem";
 import Pagination from "@/components/articles/Pagination";
 import SearchArticleInput from "@/components/articles/SearchArticleInput";
-import { IArticles } from "@/types";
 import { Metadata } from "next";
+import { Article } from "../../../generated/prisma/client";
+import { getArticles, getArticlesCount } from "@/apiCalls/articleApiCall";
+import { ARTICLE_PER_PAGE } from "@/utils/constants";
 
 export const metadata: Metadata = {
     title: 'Articles Page',
@@ -15,25 +17,32 @@ interface IProps {
 
 const ArticlesPage = async ({ searchParams }: IProps) => {
     const { pageNumber } = await searchParams;
-    console.log("clg searchParams", pageNumber);
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const articles: Article[] = await getArticles(pageNumber);
 
-    if (!response.ok) {
-        throw new Error("Failed to fetch articles");
-    }
-
-    const articles: IArticles[] = await response.json();
+    // Get Articles Count
+    const count = await getArticlesCount();
+    const pages = Math.ceil(count / ARTICLE_PER_PAGE);
 
     return (
         <section className="container m-auto px-5">
             <SearchArticleInput />
             <div className="flex items-center justify-center flex-wrap gap-7">
-                {articles.slice(0, 6).map(item => (
-                    <ArticlesItem key={item.id} article={item} />
-                ))}
+                {
+                    articles.length === 0
+                        ? <h2 className='text-gray-800 text-2xl font-bold p-5'>No articles found</h2>
+                        : articles.map(item => (
+                            <ArticlesItem key={item.id} article={item} />
+                        ))
+                }
             </div>
 
-            <Pagination pages={8} pageNumber={Number(pageNumber) || 1} route={'/articles'} />
+            {articles.length !== 0 &&
+                <Pagination
+                    pages={pages}
+                    pageNumber={Number(pageNumber) || 1}
+                    route={'/articles'}
+                />
+            }
         </section>
     )
 }

@@ -1,6 +1,6 @@
 import { JWTPayload } from "@/types";
 import { ILoginDto } from "@/types/dtos";
-import { generateJwt, setCookie } from "@/utils/generateToken";
+import { setCookie } from "@/utils/generateToken";
 import { prisma } from "@/utils/prisma";
 import { loginSchema } from "@/validations";
 import bcrypt from "bcryptjs";

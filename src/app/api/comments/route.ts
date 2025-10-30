@@ -2,6 +2,7 @@ import { ICreateCommentDto } from "@/types/dtos";
 import { prisma } from "@/utils/prisma";
 import { verifyToken } from "@/utils/verifyToken";
 import { createCommentSchema } from "@/validations";
+import { revalidatePath } from "next/cache";
 
 /**
  * @method  POST
@@ -24,7 +25,6 @@ export async function POST(request: Request) {
 
         // Validation ON Text INPUT
         const body = await request.json() as ICreateCommentDto;
-        console.log({ body })
         const validation = createCommentSchema.safeParse(body);
         if (!validation.success) {
             return Response.json(
@@ -41,6 +41,8 @@ export async function POST(request: Request) {
                 userId: user.id
             }
         })
+        // After Adding Comment Revalidate Path
+        revalidatePath("/articles/[id]")
         return Response.json(
             {
                 message: "Comment created successfully",
@@ -65,7 +67,7 @@ export async function GET(request: Request) {
     try {
         // User Must Be Admin
         const user = await verifyToken(request);
-        if (!user || !user.isAdmin) {
+        if (user === null || user.isAdmin === false) {
             return Response.json(
                 { message: "You are not authorized to get all comments, You must be admin" },
                 { status: 401 }  // Unauthorized
@@ -74,7 +76,7 @@ export async function GET(request: Request) {
 
         // Get All Comment
         const comments = await prisma.comment.findMany()
-        return Response.json({ comments }, { status: 200 })
+        return Response.json({ comments: comments }, { status: 200 })
     } catch (error) {
         console.log(error)
         return Response.json({ message: "Internal Server Error" }, { status: 500 })

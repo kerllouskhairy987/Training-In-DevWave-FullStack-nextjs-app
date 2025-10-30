@@ -1,9 +1,4 @@
-export interface IArticles {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-}
+import { Article, Comment, User } from "../../generated/prisma/client";
 
 
 export interface JWTPayload {
@@ -12,3 +7,6 @@ export interface JWTPayload {
     email: string,
     isAdmin: boolean,
 }
+
+export type CommentWithUser = Comment & { user: User };
+export type SingleArticle = Article & { comments: CommentWithUser[] };

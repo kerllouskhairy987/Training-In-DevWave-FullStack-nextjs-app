@@ -2,6 +2,7 @@ import { IUpdateCommentDto } from "@/types/dtos";
 import { prisma } from "@/utils/prisma";
 import { verifyToken } from "@/utils/verifyToken"
 import { updateCommentSchema } from "@/validations";
+import { revalidatePath } from "next/cache";
 
 /**
  * @method  PUT
@@ -50,6 +51,7 @@ export async function PUT(request: Request, { params }: IProps) {
                 text: body.text
             }
         })
+        revalidatePath("/article/[id]")
         return Response.json(
             {
                 message: "Comment updated successfully",

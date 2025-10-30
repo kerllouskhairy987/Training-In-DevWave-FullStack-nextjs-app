@@ -7,7 +7,7 @@ interface IProps {
 }
 
 const Pagination = ({ pageNumber, pages, route }: IProps) => {
-    let pagesArray: number[] = [];
+    const pagesArray: number[] = [];
     for (let i = 1; i <= pages; i++) pagesArray.push(i);
 
     const prev = pageNumber - 1;

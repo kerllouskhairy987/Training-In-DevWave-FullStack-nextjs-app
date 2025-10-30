@@ -1,10 +1,11 @@
 import { type NextRequest } from 'next/server'
 import { CreateArticleDto } from "@/types/dtos";
 import { createArticleSchema } from "@/validations";
-import { Article } from "../../../../generated/prisma/client";
 import { prisma } from "@/utils/prisma";
 import { ARTICLE_PER_PAGE } from '@/utils/constants';
 import { verifyToken } from '@/utils/verifyToken';
+import { Article } from '../../../../generated/prisma/client';
+import { revalidatePath } from 'next/cache';
 
 /** 
  * @method  GET 
@@ -20,7 +21,10 @@ export async function GET(request: NextRequest) {
 
         const articles = await prisma.article.findMany({
             skip: ARTICLE_PER_PAGE * (parseInt(pageNumber) - 1),
-            take: ARTICLE_PER_PAGE
+            take: ARTICLE_PER_PAGE,
+            orderBy: {
+                createdAt: 'desc'
+            }
         });
         return Response.json(articles, { status: 200 });
     } catch (error) {
@@ -63,6 +67,7 @@ export async function POST(request: Request) {
                 description: body.description
             }
         })
+        revalidatePath("/articles")
         return Response.json(
             {
                 message: "Article created successfully",
